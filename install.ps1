@@ -21,6 +21,12 @@ foreach ($doc in $docs){
     iwr -uri $doc.url -OutFile $doc.outfile 
         copy-item $doc.outfile $doc.file -force
 }
+if (get-command git -ErrorAction SilentlyContinue){
+    write-host "Already have git" -ForegroundColor green
+} else {
+    iwr -uri "https://github.com/git-for-windows/git/releases/download/v2.50.1.windows.1/Git-2.50.1-64-bit.exe" -OutFile "$env:TEMP/git.exe"
+        start-process "$env:TEMP/git.exe" -ArgumentList "/VERYSILENT /quiet /S /SILENT" -Wait -NoNewWindow
+}
 
 try{
     $currentPath = [Environment]::GetEnvironmentVariable("Path", "User")
